@@ -1,17 +1,14 @@
- trigger:
-- main
+trigger:
+  branches:
+    include:
+      - main
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'ubuntu-latest'
 
 steps:
 
 - checkout: self
-
-- task: TerraformInstaller@1
-  displayName: 'Install Terraform'
-  inputs:
-    terraformVersion: 'latest'
 
 - script: |
     terraform --version
