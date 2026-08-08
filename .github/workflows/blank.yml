@@ -1,11 +1,39 @@
-- name: Terraform Init
-  working-directory: environments/preprod
-  run: terraform init
+name: Terraform CI
 
-- name: Terraform Validate
-  working-directory: environments/preprod
-  run: terraform validate
+on:
+  push:
+    branches:
+      - main
 
-- name: Terraform Plan
-  working-directory: environments/preprod
-  run: terraform plan
+  pull_request:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+jobs:
+  terraform:
+    name: Terraform Validate and Plan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Format Check
+        run: terraform fmt -check -recursive
+
+      - name: Terraform Init
+        working-directory: environments/dev
+        run: terraform init
+
+      - name: Terraform Validate
+        working-directory: environments/dev
+        run: terraform validate
+
+      - name: Terraform Plan
+        working-directory: environments/dev
+        run: terraform plan
